@@ -1,7 +1,7 @@
 var Table = require('cli-table');
-var adressList = require('./adress-list.js')
+var adressList = require('./adress-list.js');
 
-function displayInfos(idNumber) {
+module.exports = function displayInfos(idNumber) {
 
   var table = new Table();
 
@@ -56,6 +56,4 @@ function displayInfos(idNumber) {
 
   console.log(table.toString());
 
-}
-
-displayInfos(2);
+};
