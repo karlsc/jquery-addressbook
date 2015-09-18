@@ -42,8 +42,20 @@ function displayInfos(idNumber) {
     }
   }
   table.push( {"Phones": phoneStr } );
+
+  var emailStr = "";
+  count = 0;
+  for (var key in entry["Emails"]) {
+    emailStr += (key+': '+entry["Emails"][key]);
+    if (count+1 < Object.keys(entry["Emails"]).length) {
+      emailStr += "\n";
+      count ++;
+    }
+  }
+  table.push( {"Emails": emailStr } );
+
   console.log(table.toString());
 
 }
 
-displayInfos(0);
+displayInfos(2);
