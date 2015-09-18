@@ -1,0 +1,24 @@
+{
+  "name": "address-book-project",
+  "version": "1.0.0",
+  "description": "## Basic instructions   * Fork this repo and create a new Cloud9 project cloning your version   * All your code will be in the `master` branch unless otherwise specified",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guillaume-boutin/address-book-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guillaume-boutin/address-book-project/issues"
+  },
+  "homepage": "https://github.com/guillaume-boutin/address-book-project#readme",
+  "dependencies": {
+    "inquirer": "^0.10.0",
+    "cli-table": "^0.3.1"
+  },
+  "devDependencies": {}
+}
