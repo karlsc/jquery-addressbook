@@ -101,6 +101,11 @@ function displayAddressBook(addressBookId,limit,offset,addressBookName) {
     ).then(function(result){
         $app.html(''); // Clear the #app div
         $app.append('<h2>Address Book: '+result.addressBookName+'</h2>');
+        $app.append('<p class="return-listing">Return to address book listing</p>');
+        $(".return-listing").on("click", function(){
+            
+            displayAddressBooksList(5, 0);
+        });
         $app.append('<ul>');
         
         result.addressBook.forEach(function(ab) {
