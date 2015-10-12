@@ -34,7 +34,11 @@ function getEntries(addressBookId) {
 }
 
 function getEntry(entryId) {
-    // TODO..
+    return $.getJSON(API_URL + 'Entries/' + entryId).then(
+        function(entry) {
+            return entry
+        }
+    )
 }
 // End data retrieval functions
 
@@ -58,17 +62,15 @@ function displayAddressBooksList(limit, offset) {
             $app.append("<button class='btn-previous'>Previous page</button>");
             $app.append("<button class='btn-next'>Next page</button>");
             
-            
-            
             $("button").css("margin","0.5em");
             $(".btn-next").on("click", function(){
                 offset += limit;
                 return displayAddressBooksList(limit, offset);
             });
+            
             if(offset === 0){
-                    $(".btn-previous").attr("disabled","disabled");
-                }
-                
+                $(".btn-previous").attr("disabled","disabled");
+            }
             if (!result.hasNext) {
                 $(".btn-next").attr("disabled","disabled");
             }
@@ -126,11 +128,65 @@ function displayAddressBook(addressBookId,limit,offset,addressBookName) {
             offset -= limit;
             return displayAddressBook(addressBookId,limit, offset,result.addressBookName);
         });
+        
+        $('li').on('click', function() {
+            displayEntry($(this));
+        });
     });
     
 }
 
-function displayEntry() {
+function displayEntry($li) {
+    return $.getJSON(API_URL + '/Entries/' + $li.data('id')).then(
+        function(entry) {
+
+            var birthday = new Date(entry.birthday);
+            var month = birthday .getMonth()+1;
+            if (month <= 9) {
+                month = '0'+month.toString();
+            }
+            var birthday = birthday.getFullYear()+'-'+month+'-'+ birthday.getDate();
+            
+            return {entryId: $li.data('id'), firstName: entry.firstName, lastName: entry.lastName, birthday: birthday}
+        
+        }
+    ).then( function(result) {
+        $app.html(''); // Clear the #app div
+        $app.append('<h2>Entry: '+result.firstName+' '+result.lastName+'</h2>');
+        $app.append('<ul></ul>');
+        for (var key in result) {
+            $app.children('ul').append('<li>'+key+': '+result[key]+'</li>');
+        }
+        
+        return result.entryId
+        
+    }).then( function(entryId) {
+        
+        return $.getJSON(API_URL + "/Addresses?filter=" + JSON.stringify({where: {entryId: entryId}})).then(
+            function(addresses) {
+                console.log(addresses);
+                var count = 1;
+                addresses.forEach( function(address) {
+                    $app.append('<h3>Address '+count+' ('+address.type+')</h3>');
+                    $app.append('<ul id=address-'+count+'></ul>');
+                    if (address.line2) {
+                        $app.children('#address-'+count).append('<li>'+address.line1+' '+address.line2+'</li>');
+                    }
+                    else {
+                        $app.children('#address-'+count).append('<li>'+address.line1+'</li>');
+                    }
+                    if (address.state) {
+                        $app.children('#address-'+count).append('<li>'+address.city+', '+address.state+', '+address.country+'</li>');
+                    }
+                    else {
+                        $app.children('#address-'+count).append('<li>'+address.city+', '+address.country+'</li>');
+                    }
+                    $app.children('#address-'+count).append('<li>'+address.zip+'</li>');
+                    count++
+                })
+            }    
+        )
+    })
     
 }
 // End functions that display views
