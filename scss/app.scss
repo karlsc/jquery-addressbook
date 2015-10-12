@@ -2,7 +2,7 @@
 
 // @import   "foundation/components/accordion";
 // @import   "foundation/components/alert-boxes";
-// @import   "foundation/components/block-grid";
+@import   "foundation/components/block-grid";
 // @import   "foundation/components/breadcrumbs";
 // @import   "foundation/components/button-groups";
 @import   "foundation/components/buttons";
@@ -11,7 +11,7 @@
 // @import   "foundation/components/dropdown-buttons";
 // @import   "foundation/components/flex-video";
 // @import   "foundation/components/forms";
-// @import   "foundation/components/grid";
+ @import   "foundation/components/grid";
 // @import   "foundation/components/inline-lists";
 // @import   "foundation/components/joyride";
 // @import   "foundation/components/keystrokes";
@@ -35,15 +35,34 @@
 @import   "foundation/components/type";
 // @import   "foundation/components/offcanvas";
 // @import   "foundation/components/visibility";
-
+.div {
+   
+}
 
 body{
     
     background-color:#63DDAD;
+    padding-left:50%;
+    
+    
+    ul {
+        list-style:none;
+        background-color:#E3D081;
+        border-radius:1em;
+        padding:1em;
+        cursor:pointer;
+        li {
+            
+        }
+    }
 }
 
 h1 {
     color:#54494B;
     font-family:"Futura";
     font-weight:"bold";
+}
+
+button {
+    border-radius:10px;
 }

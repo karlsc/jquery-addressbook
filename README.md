@@ -1,3 +1,4 @@
+
 # jQuery Address Book
 
 ## Introduction
@@ -58,3 +59,4 @@ As a challenge, add the following functionality:
 3. In "edit mode", the first name, last name and birthday will be changed to `<input>` elements. Editing them and pressing ENTER will change them thru the API
 4. In "edit mode", each email, address and phone number will have a DELETE button next to it. Clicking this button should delete the entry in the API and update the UI
 5. In "edit mode", each of email, address and phone sections will have an ADD button. Clicking this button should open a popup with a form to add a new sub-entry of that type
+

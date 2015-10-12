@@ -59,8 +59,8 @@ function displayAddressBooksList(limit, offset) {
                 var addressBookName = $(this).text();
                 displayAddressBook(addressBookId,5,0,addressBookName);
             });
-            $app.append("<button class='btn-previous'>Previous page</button>");
-            $app.append("<button class='btn-next'>Next page</button>");
+            $app.append("<button class='btn-previous'><</button>");
+            $app.append("<button class='btn-next'>></button>");
             
             
             
@@ -112,8 +112,8 @@ function displayAddressBook(addressBookId,limit,offset,addressBookName) {
             $app.find('ul').append('<li data-id="' + ab.id + '">' + ab.lastName+', '+ab.firstName + '</li>');
         });
         
-        $app.append("<button class='btn-previous'>Previous page</button>");
-        $app.append("<button class='btn-next'>Next page</button>");
+        $app.append("<button class='btn-previous'><</button>");
+        $app.append("<button class='btn-next'>></button>");
         $("button").css("margin","0.5em");
         $(".btn-next").on("click", function(){
             offset += limit;
