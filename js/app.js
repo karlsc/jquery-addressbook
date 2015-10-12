@@ -26,7 +26,7 @@ function getAddressBooks(limit, offset) {
 }
 
 function getAddressBook(id) {
-    return $.getJSON(API_URL + '/AddressBooks/' + id)
+    return $.getJSON(API_URL + '/AddressBooks/' + id);
 }
 
 function getEntries(addressBookId) {
@@ -36,9 +36,9 @@ function getEntries(addressBookId) {
 function getEntry(entryId) {
     return $.getJSON(API_URL + 'Entries/' + entryId).then(
         function(entry) {
-            return entry
+            return entry;
         }
-    )
+    );
 }
 // End data retrieval functions
 
@@ -147,7 +147,7 @@ function displayEntry($li) {
             }
             var birthday = birthday.getFullYear()+'-'+month+'-'+ birthday.getDate();
             
-            return {entryId: $li.data('id'), firstName: entry.firstName, lastName: entry.lastName, birthday: birthday}
+            return {entryId: $li.data('id'), firstName: entry.firstName, lastName: entry.lastName, birthday: birthday};
         
         }
     ).then( function(result) {
@@ -158,7 +158,7 @@ function displayEntry($li) {
             $app.children('ul').append('<li>'+key+': '+result[key]+'</li>');
         }
         
-        return result.entryId
+        return result.entryId;
         
     }).then( function(entryId) {
         
@@ -182,11 +182,11 @@ function displayEntry($li) {
                         $app.children('#address-'+count).append('<li>'+address.city+', '+address.country+'</li>');
                     }
                     $app.children('#address-'+count).append('<li>'+address.zip+'</li>');
-                    count++
-                })
+                    count++;
+                });
             }    
-        )
-    })
+        );
+    });
     
 }
 // End functions that display views
