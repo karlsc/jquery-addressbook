@@ -34,11 +34,14 @@ function getEntries(addressBookId) {
 }
 
 function getEntry(entryId) {
+<<<<<<< HEAD
     return $.getJSON(API_URL + 'Entries/' + entryId).then(
         function(entry) {
             return entry;
         }
     );
+=======
+>>>>>>> b76d323ac7560faf0343dc0809fa27983b230a58
 }
 // End data retrieval functions
 
@@ -130,13 +133,13 @@ function displayAddressBook(addressBookId,limit,offset,addressBookName) {
         });
         
         $('li').on('click', function() {
-            displayEntry($(this));
+            displayEntry($(this), addressBookId, result.addressBookName);
         });
     });
     
 }
 
-function displayEntry($li) {
+function displayEntry($li, addressBookId, addressBookName) {
     return $.getJSON(API_URL + '/Entries/' + $li.data('id')).then(
         function(entry) {
 
@@ -145,14 +148,22 @@ function displayEntry($li) {
             if (month <= 9) {
                 month = '0'+month.toString();
             }
-            var birthday = birthday.getFullYear()+'-'+month+'-'+ birthday.getDate();
+            var birthdayFormat = birthday.getFullYear()+'-'+month+'-'+ birthday.getDate();
             
+<<<<<<< HEAD
             return {entryId: $li.data('id'), firstName: entry.firstName, lastName: entry.lastName, birthday: birthday};
+=======
+            return {entryId: $li.data('id'), firstName: entry.firstName, lastName: entry.lastName, birthday: birthdayFormat};
+>>>>>>> b76d323ac7560faf0343dc0809fa27983b230a58
         
         }
     ).then( function(result) {
         $app.html(''); // Clear the #app div
         $app.append('<h2>Entry: '+result.firstName+' '+result.lastName+'</h2>');
+        $app.append('<p class="return-listing">Return to address book listing</p>');
+        $(".return-listing").on("click", function(){
+            displayAddressBook(addressBookId, 5, 0, addressBookName);
+        });
         $app.append('<ul></ul>');
         for (var key in result) {
             $app.children('ul').append('<li>'+key+': '+result[key]+'</li>');
@@ -162,30 +173,58 @@ function displayEntry($li) {
         
     }).then( function(entryId) {
         
-        return $.getJSON(API_URL + "/Addresses?filter=" + JSON.stringify({where: {entryId: entryId}})).then(
+        $.getJSON(API_URL + "/Addresses?filter=" + JSON.stringify({where: {entryId: entryId}})).then(
             function(addresses) {
-                console.log(addresses);
-                var count = 1;
-                addresses.forEach( function(address) {
-                    $app.append('<h3>Address '+count+' ('+address.type+')</h3>');
-                    $app.append('<ul id=address-'+count+'></ul>');
-                    if (address.line2) {
-                        $app.children('#address-'+count).append('<li>'+address.line1+' '+address.line2+'</li>');
+                for (var i=0; i<addresses.length; i++) {
+                    $app.append('<h3>Address '+(i+1)+' ('+addresses[i].type+')</h3>');
+                    $app.append('<ul id=address-'+(i+1)+'></ul>');
+                    if (addresses[i].line2) {
+                        $app.children('#address-'+(i+1)).append('<li>'+addresses[i].line1+' '+(addresses[i].line2+'</li>'));
                     }
                     else {
-                        $app.children('#address-'+count).append('<li>'+address.line1+'</li>');
+                        $app.children('#address-'+(i+1)).append('<li>'+addresses[i].line1+'</li>');
                     }
-                    if (address.state) {
-                        $app.children('#address-'+count).append('<li>'+address.city+', '+address.state+', '+address.country+'</li>');
+                    if (addresses[i].state) {
+                        $app.children('#address-'+(i+1)).append('<li>'+addresses[i].city+', '+addresses[i].state+', '+addresses[i].country+'</li>');
                     }
                     else {
-                        $app.children('#address-'+count).append('<li>'+address.city+', '+address.country+'</li>');
+                        $app.children('#address-'+(i+1)).append('<li>'+addresses[i].city+', '+addresses[i].country+'</li>');
                     }
+<<<<<<< HEAD
                     $app.children('#address-'+count).append('<li>'+address.zip+'</li>');
                     count++;
                 });
             }    
         );
+=======
+                    $app.children('#address-'+(i+1)).append('<li>'+addresses[i].zip+'</li>');
+                }
+            }
+        );
+        return entryId;
+    }).then( function(entryId) {
+        
+        $.getJSON(API_URL + "/Phones?filter=" + JSON.stringify({where: {entryId: entryId}})).then(
+            function(phones) {
+                for (var i=0; i<phones.length; i++) {
+                    $app.append('<h3>Phone '+(i+1)+' ('+phones[i].type+')</h3>');
+                    $app.append('<ul id=phone-'+(i+1)+'><li>'+phones[i].phoneNumber+'</li></ul>');
+                }
+            }
+        );
+        return entryId;
+    }).then( function(entryId) {
+        
+        $.getJSON(API_URL + "/EmailAddresses?filter=" + JSON.stringify({where: {entryId: entryId}})).then(
+            function(emails) {
+                for (var i=0; i<emails.length; i++) {
+                    $app.append('<h3>Email '+(i+1)+' ('+emails[i].type+')</h3>');
+                    $app.append('<ul id=phone-'+(i+1)+'><li>'+emails[i].email+'</li></ul>');
+                }
+            }
+        );
+        return entryId;
+>>>>>>> b76d323ac7560faf0343dc0809fa27983b230a58
     });
     
 }
