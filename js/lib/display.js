@@ -17,6 +17,12 @@ function displayAddressBooksList(limit, offset) {
                 var addressBookName = $(this).text();
                 displayAddressBook(5,0,addressBookId,addressBookName);
             });
+            $app.append(
+               $("<div class='text-center'/>").append(
+                   $("<button class='btn-previous'><</button>")).append(
+                       $("<button class='btn-next'>></button>")
+               )
+            );
             $app.append("<button class='btn-previous'><</button>");
             $app.append("<button class='btn-next'>></button>");
             
