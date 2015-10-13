@@ -23,7 +23,6 @@ function displayAddressBooksList(limit, offset) {
                        $("<button class='btn-next'>></button>")
                )
             );
-            
             $("button").css("margin","0.5em");
             $(".btn-next").on("click", function(){
                 offset += limit;
@@ -58,9 +57,12 @@ function displayAddressBook(limit,offset,addressBookId,addressBookName) {
         result.addressBook.forEach(function(ab) {
             $app.find('ul').append('<li data-id="' + ab.id + '">' + ab.lastName+', '+ab.firstName + '</li>');
         });
-        
-        $app.append("<button class='btn-previous'><</button>");
-        $app.append("<button class='btn-next'>></button>");
+        $app.append(
+           $("<div class='text-center'/>").append(
+               $("<button class='btn-previous'><</button>")).append(
+                   $("<button class='btn-next'>></button>")
+           )
+        );
         $("button").css("margin","0.5em");
         $(".btn-next").on("click", function(){
             offset += limit;
