@@ -117,14 +117,29 @@ button {
 .main-table {
     th {
         vertical-align:top;
+        padding:0.5em;
+        text-align:right;
+    
+        td {
+            padding:0.5em;
+            vertical-align:top;
+            ul {
+            margin:0.5em;
+            }
+        }    
     }
     
-    ul {
-        display:block;
-    }
+   
 }
 
-
+.address-table, .phone-table, .email-table {
+    padding: 0.5em;
+    vertical-align:top;
+    
+    ul {
+        margin:0.5em;
+    }
+}
 
 
     
