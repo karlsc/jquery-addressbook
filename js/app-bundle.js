@@ -78,8 +78,6 @@
 	                       $("<button class='btn-next'>></button>")
 	               )
 	            );
-	            $app.append("<button class='btn-previous'><</button>");
-	            $app.append("<button class='btn-next'>></button>");
 	            
 	            $("button").css("margin","0.5em");
 	            $(".btn-next").on("click", function(){
