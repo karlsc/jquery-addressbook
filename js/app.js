@@ -1,10 +1,6 @@
-// Add foundation dynamic functionality on page
 $(document).foundation();
 
-// Set the API base url
 var API_URL = "https://loopback-rest-api-demo-ziad-saab.c9.io/api";
-
-// Get a reference to the <div id="app">. This is where we will output our stuff
 var $app = $('#app');
 
 // Data retrieval functions
@@ -19,29 +15,31 @@ function getAddressBooks(limit, offset) {
             else {
                 hasNext = false;
             }
-            
             return {addressBooks: addressBooks, hasNext: hasNext};
         }
     );
 }
 
-function getAddressBook(id) {
-    return $.getJSON(API_URL + '/AddressBooks/' + id);
-}
-
-function getEntries(addressBookId) {
-    // TODO...
-}
-
-function getEntry(entryId) {
-<<<<<<< HEAD
-    return $.getJSON(API_URL + 'Entries/' + entryId).then(
-        function(entry) {
-            return entry;
+function getAddressBook(addressBookId,limit,offset,addressBookName) {
+    var filter = JSON.stringify({order: "lastName", limit: limit + 1, offset: offset});
+    return $.getJSON(API_URL + '/AddressBooks/'+addressBookId+'/entries?filter='+ filter).then(
+        function(addressBook) {
+            if (addressBook.length > limit) {
+                var hasNext = true;
+                addressBook.pop();
+            }
+            else {
+                hasNext = false;
+            }
+            
+            return {addressBook: addressBook, hasNext: hasNext, addressBookName: addressBookName};
         }
     );
-=======
->>>>>>> b76d323ac7560faf0343dc0809fa27983b230a58
+}
+
+function getEntry(entry, addressBookId, addressBookName) {
+    var filter = JSON.stringify({include:["addresses","phones","emails"]});
+    return $.getJSON(API_URL + '/Entries/' + entry.data('id') + '?filter=' + filter);//.then(
 }
 // End data retrieval functions
 
@@ -86,21 +84,8 @@ function displayAddressBooksList(limit, offset) {
 }
 
 function displayAddressBook(addressBookId,limit,offset,addressBookName) {
-    var filter = JSON.stringify({order: "lastName", limit: limit + 1, offset: offset});
-    return $.getJSON(API_URL + '/AddressBooks/'+addressBookId+'/entries?filter='+ filter).then(
-        function(addressBook) {
-            if (addressBook.length > limit) {
-                var hasNext = true;
-                addressBook.pop();
-            }
-            else {
-                hasNext = false;
-            }
-            
-            return {addressBook: addressBook, hasNext: hasNext, addressBookName: addressBookName};
-        }
-    ).then(function(result){
-        $app.html(''); // Clear the #app div
+    getAddressBook(addressBookId,limit,offset,addressBookName).then(function(result){
+        $app.html('');
         $app.append('<h2>Address Book: '+result.addressBookName+'</h2>');
         $app.append('<p class="return-listing">Return to address book listing</p>');
         $(".return-listing").on("click", function(){
@@ -136,28 +121,18 @@ function displayAddressBook(addressBookId,limit,offset,addressBookName) {
             displayEntry($(this), addressBookId, result.addressBookName);
         });
     });
-    
 }
 
-function displayEntry($li, addressBookId, addressBookName) {
-    return $.getJSON(API_URL + '/Entries/' + $li.data('id')).then(
-        function(entry) {
-
-            var birthday = new Date(entry.birthday);
-            var month = birthday .getMonth()+1;
+function displayEntry(entry, addressBookId, addressBookName) {
+    getEntry(entry, addressBookId, addressBookName).then(function(result) {
+        
+        var birthday = new Date(result.birthday);
+        var month = birthday .getMonth()+1;
             if (month <= 9) {
                 month = '0'+month.toString();
             }
-            var birthdayFormat = birthday.getFullYear()+'-'+month+'-'+ birthday.getDate();
-            
-<<<<<<< HEAD
-            return {entryId: $li.data('id'), firstName: entry.firstName, lastName: entry.lastName, birthday: birthday};
-=======
-            return {entryId: $li.data('id'), firstName: entry.firstName, lastName: entry.lastName, birthday: birthdayFormat};
->>>>>>> b76d323ac7560faf0343dc0809fa27983b230a58
+        var birthdayFormat = birthday.getFullYear()+'-'+month+'-'+ birthday.getDate();
         
-        }
-    ).then( function(result) {
         $app.html(''); // Clear the #app div
         $app.append('<h2>Entry: '+result.firstName+' '+result.lastName+'</h2>');
         $app.append('<p class="return-listing">Return to address book listing</p>');
@@ -165,71 +140,36 @@ function displayEntry($li, addressBookId, addressBookName) {
             displayAddressBook(addressBookId, 5, 0, addressBookName);
         });
         $app.append('<ul></ul>');
-        for (var key in result) {
-            $app.children('ul').append('<li>'+key+': '+result[key]+'</li>');
+        $app.children('ul').append('<li>Name: '+result.firstName+' '+result.lastName+'</li>');
+        $app.children('ul').append('<li>Birthday: '+birthdayFormat+'</li>');
+        
+        for (var i=0; i < result.addresses.length; i++) {
+            $app.append('<h3>Address '+(i+1)+' ('+result.addresses[i].type+')</h3>');
+            $app.append('<ul id=address-'+(i+1)+'></ul>');
+            if (result.addresses[i].line2) {
+                $app.children('#address-'+(i+1)).append('<li>'+result.addresses[i].line1+' '+(result.addresses[i].line2+'</li>'));
+            }
+            else {
+                $app.children('#address-'+(i+1)).append('<li>'+result.addresses[i].line1+'</li>');
+            }
+            if (result.addresses[i].state) {
+                $app.children('#address-'+(i+1)).append('<li>'+result.addresses[i].city+', '+result.addresses[i].state+', '+result.addresses[i].country+'</li>');
+            }
+            else {
+                $app.children('#address-'+(i+1)).append('<li>'+result.addresses[i].city+', '+result.addresses[i].country+'</li>');
+            }
+            $app.children('#address-'+(i+1)).append('<li>'+result.addresses[i].zip+'</li>');
         }
-        
-        return result.entryId;
-        
-    }).then( function(entryId) {
-        
-        $.getJSON(API_URL + "/Addresses?filter=" + JSON.stringify({where: {entryId: entryId}})).then(
-            function(addresses) {
-                for (var i=0; i<addresses.length; i++) {
-                    $app.append('<h3>Address '+(i+1)+' ('+addresses[i].type+')</h3>');
-                    $app.append('<ul id=address-'+(i+1)+'></ul>');
-                    if (addresses[i].line2) {
-                        $app.children('#address-'+(i+1)).append('<li>'+addresses[i].line1+' '+(addresses[i].line2+'</li>'));
-                    }
-                    else {
-                        $app.children('#address-'+(i+1)).append('<li>'+addresses[i].line1+'</li>');
-                    }
-                    if (addresses[i].state) {
-                        $app.children('#address-'+(i+1)).append('<li>'+addresses[i].city+', '+addresses[i].state+', '+addresses[i].country+'</li>');
-                    }
-                    else {
-                        $app.children('#address-'+(i+1)).append('<li>'+addresses[i].city+', '+addresses[i].country+'</li>');
-                    }
-<<<<<<< HEAD
-                    $app.children('#address-'+count).append('<li>'+address.zip+'</li>');
-                    count++;
-                });
-            }    
-        );
-=======
-                    $app.children('#address-'+(i+1)).append('<li>'+addresses[i].zip+'</li>');
-                }
-            }
-        );
-        return entryId;
-    }).then( function(entryId) {
-        
-        $.getJSON(API_URL + "/Phones?filter=" + JSON.stringify({where: {entryId: entryId}})).then(
-            function(phones) {
-                for (var i=0; i<phones.length; i++) {
-                    $app.append('<h3>Phone '+(i+1)+' ('+phones[i].type+')</h3>');
-                    $app.append('<ul id=phone-'+(i+1)+'><li>'+phones[i].phoneNumber+'</li></ul>');
-                }
-            }
-        );
-        return entryId;
-    }).then( function(entryId) {
-        
-        $.getJSON(API_URL + "/EmailAddresses?filter=" + JSON.stringify({where: {entryId: entryId}})).then(
-            function(emails) {
-                for (var i=0; i<emails.length; i++) {
-                    $app.append('<h3>Email '+(i+1)+' ('+emails[i].type+')</h3>');
-                    $app.append('<ul id=phone-'+(i+1)+'><li>'+emails[i].email+'</li></ul>');
-                }
-            }
-        );
-        return entryId;
->>>>>>> b76d323ac7560faf0343dc0809fa27983b230a58
+        for (var i=0; i < result.phones.length; i++) {
+            $app.append('<h3>Phone '+(i+1)+' ('+result.phones[i].type+')</h3>');
+            $app.append('<ul id=phone-'+(i+1)+'><li>'+result.phones[i].phoneNumber+'</li></ul>');
+        }
+        for (var i=0; i < result.emails.length; i++) {
+            $app.append('<h3>Email '+(i+1)+' ('+result.emails[i].type+')</h3>');
+            $app.append('<ul id=phone-'+(i+1)+'><li>'+result.emails[i].email+'</li></ul>');
+        }
     });
-    
 }
 // End functions that display views
 
-
-// Start the app by displaying all the addressbooks
 displayAddressBooksList(5, 0);
