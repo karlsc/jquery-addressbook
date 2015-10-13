@@ -104,8 +104,7 @@ function displayEntry(entry, addressBookId, addressBookName) {
         });
         
         $app.append('<table class="main-table"/>');
-        $('.main-table').append('<tr><th>Name:</th><td>'+result.lastName+', '+result.firstName+'</td></tr>');
-        $('.main-table').append('<tr><th>Birthday:</th><td>'+birthdayFormat+'</td></tr>');
+        $('.main-table').append('<tr><th>Birthday:</th><td><ul><li>'+birthdayFormat+'</li></ul></td></tr>');
         $('.main-table').append('<tr><th>Address(es):</th><td class="address-table"></td></tr>');
         for (var i = 0; i < result.addresses.length ; i++) {
             var $ul1 = $('<ul class="vcard"/>');
