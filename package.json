@@ -12,6 +12,7 @@
     "grunt-sass": "~0.18.0"
   },
   "dependencies": {
+    "backbone": "^1.2.3",
     "underscore": "^1.8.3"
   }
 }
