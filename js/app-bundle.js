@@ -101,8 +101,8 @@
 	function displayAddressBook(limit,offset,addressBookId,addressBookName) {
 	    dataFunctions.getAddressBook(limit,offset,addressBookId).then(function(result){
 	        $app.html('');
-	        $app.append("<h2>"+addressBookName+"'s Address Book</h2>");
-	        $app.append('<p class="return-listing">Return to address book listing</p>');
+	        $app.append("<h2>"+addressBookName+"'s Friends</h2>");
+	        $app.append('<p class="return-listing"><<< Return to address book listing</p>');
 	        $(".return-listing").on("click", function(){
 	            
 	            displayAddressBooksList(5, 0);
@@ -155,7 +155,7 @@
 	        
 	        $app.html(''); // Clear the #app div
 	        $app.append('<h2>'+result.firstName+' '+result.lastName+'</h2>');
-	        $app.append('<p class="return-listing">Return to address book listing</p>');
+	        $app.append('<p class="return-listing"><<< Return to address book listing</p>');
 	        $(".return-listing").on("click", function(){
 	            displayAddressBook(5,0,addressBookId,addressBookName);
 	        });
