@@ -20,7 +20,7 @@ function getAddressBooks(limit, offset) {
     );
 }
 
-function getAddressBook(addressBookId,limit,offset,addressBookName) {
+function getAddressBook(limit,offset,addressBookId) {
     var filter = JSON.stringify({order: "lastName", limit: limit + 1, offset: offset});
     return $.getJSON(API_URL + '/AddressBooks/'+addressBookId+'/entries?filter='+ filter).then(
         function(addressBook) {
@@ -31,8 +31,7 @@ function getAddressBook(addressBookId,limit,offset,addressBookName) {
             else {
                 hasNext = false;
             }
-            
-            return {addressBook: addressBook, hasNext: hasNext, addressBookName: addressBookName};
+            return {addressBook: addressBook, hasNext: hasNext};
         }
     );
 }
@@ -58,7 +57,7 @@ function displayAddressBooksList(limit, offset) {
             $app.find('li').on('click', function() {
                 var addressBookId = $(this).data('id');
                 var addressBookName = $(this).text();
-                displayAddressBook(addressBookId,5,0,addressBookName);
+                displayAddressBook(5,0,addressBookId,addressBookName);
             });
             $app.append("<button class='btn-previous'>Previous page</button>");
             $app.append("<button class='btn-next'>Next page</button>");
@@ -83,10 +82,10 @@ function displayAddressBooksList(limit, offset) {
     );
 }
 
-function displayAddressBook(addressBookId,limit,offset,addressBookName) {
-    getAddressBook(addressBookId,limit,offset,addressBookName).then(function(result){
+function displayAddressBook(limit,offset,addressBookId,addressBookName) {
+    getAddressBook(limit,offset,addressBookId).then(function(result){
         $app.html('');
-        $app.append('<h2>Address Book: '+result.addressBookName+'</h2>');
+        $app.append('<h2>Address Book: '+addressBookName+'</h2>');
         $app.append('<p class="return-listing">Return to address book listing</p>');
         $(".return-listing").on("click", function(){
             
@@ -103,7 +102,7 @@ function displayAddressBook(addressBookId,limit,offset,addressBookName) {
         $("button").css("margin","0.5em");
         $(".btn-next").on("click", function(){
             offset += limit;
-            return displayAddressBook(addressBookId,limit, offset,result.addressBookName);
+            return displayAddressBook(limit,offset,addressBookId,addressBookName);
         });
         if(offset === 0){
                 $(".btn-previous").attr("disabled","disabled");
@@ -114,11 +113,11 @@ function displayAddressBook(addressBookId,limit,offset,addressBookName) {
         }
         $(".btn-previous").on("click", function(){
             offset -= limit;
-            return displayAddressBook(addressBookId,limit, offset,result.addressBookName);
+            return displayAddressBook(limit,offset,addressBookId,addressBookName);
         });
         
         $('li').on('click', function() {
-            displayEntry($(this), addressBookId, result.addressBookName);
+            displayEntry($(this),addressBookId,addressBookName);
         });
     });
 }
@@ -137,7 +136,7 @@ function displayEntry(entry, addressBookId, addressBookName) {
         $app.append('<h2>Entry: '+result.firstName+' '+result.lastName+'</h2>');
         $app.append('<p class="return-listing">Return to address book listing</p>');
         $(".return-listing").on("click", function(){
-            displayAddressBook(addressBookId, 5, 0, addressBookName);
+            displayAddressBook(5,0,addressBookId,addressBookName);
         });
         $app.append('<ul></ul>');
         $app.children('ul').append('<li>Name: '+result.firstName+' '+result.lastName+'</li>');
