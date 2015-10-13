@@ -10,5 +10,9 @@
     "grunt": "~0.4.5",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-sass": "~0.18.0"
+  },
+  "dependencies": {
+    "backbone": "^1.2.3",
+    "underscore": "^1.8.3"
   }
 }
