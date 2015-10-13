@@ -1,10 +1,6 @@
-// Add foundation dynamic functionality on page
 $(document).foundation();
 
-// Set the API base url
 var API_URL = "https://loopback-rest-api-demo-ziad-saab.c9.io/api";
-
-// Get a reference to the <div id="app">. This is where we will output our stuff
 var $app = $('#app');
 
 // Data retrieval functions
@@ -19,22 +15,30 @@ function getAddressBooks(limit, offset) {
             else {
                 hasNext = false;
             }
-            
             return {addressBooks: addressBooks, hasNext: hasNext};
         }
     );
 }
 
-function getAddressBook(id) {
-    return $.getJSON(API_URL + '/AddressBooks/' + id)
+function getAddressBook(limit,offset,addressBookId) {
+    var filter = JSON.stringify({order: "lastName", limit: limit + 1, offset: offset});
+    return $.getJSON(API_URL + '/AddressBooks/'+addressBookId+'/entries?filter='+ filter).then(
+        function(addressBook) {
+            if (addressBook.length > limit) {
+                var hasNext = true;
+                addressBook.pop();
+            }
+            else {
+                hasNext = false;
+            }
+            return {addressBook: addressBook, hasNext: hasNext};
+        }
+    );
 }
 
-function getEntries(addressBookId) {
-    // TODO...
-}
-
-function getEntry(entryId) {
-    // TODO..
+function getEntry(entry, addressBookId, addressBookName) {
+    var filter = JSON.stringify({include:["addresses","phones","emails"]});
+    return $.getJSON(API_URL + '/Entries/' + entry.data('id') + '?filter=' + filter);//.then(
 }
 // End data retrieval functions
 
@@ -59,7 +63,7 @@ function displayAddressBooksList(limit, offset) {
             $app.find('li').on('click', function() {
                 var addressBookId = $(this).data('id');
                 var addressBookName = $(this).text();
-                displayAddressBook(addressBookId,5,0,addressBookName);
+                displayAddressBook(5,0,addressBookId,addressBookName);
             });
             $app.append(
                 $("<div class='text-center'/>").append(
@@ -68,17 +72,15 @@ function displayAddressBooksList(limit, offset) {
                 )
                     );
             
-            
-            
             $("button").css("margin","0.5em");
             $(".btn-next").on("click", function(){
                 offset += limit;
                 return displayAddressBooksList(limit, offset);
             });
+            
             if(offset === 0){
-                    $(".btn-previous").attr("disabled","disabled");
-                }
-                
+                $(".btn-previous").attr("disabled","disabled");
+            }
             if (!result.hasNext) {
                 $(".btn-next").attr("disabled","disabled");
             }
@@ -90,23 +92,10 @@ function displayAddressBooksList(limit, offset) {
     );
 }
 
-function displayAddressBook(addressBookId,limit,offset,addressBookName) {
-    var filter = JSON.stringify({order: "lastName", limit: limit + 1, offset: offset});
-    return $.getJSON(API_URL + '/AddressBooks/'+addressBookId+'/entries?filter='+ filter).then(
-        function(addressBook) {
-            if (addressBook.length > limit) {
-                var hasNext = true;
-                addressBook.pop();
-            }
-            else {
-                hasNext = false;
-            }
-            
-            return {addressBook: addressBook, hasNext: hasNext, addressBookName: addressBookName};
-        }
-    ).then(function(result){
-        $app.html(''); // Clear the #app div
-        $app.append('<h2>Address Book: '+result.addressBookName+'</h2>');
+function displayAddressBook(limit,offset,addressBookId,addressBookName) {
+    getAddressBook(limit,offset,addressBookId).then(function(result){
+        $app.html('');
+        $app.append('<h2>Address Book: '+addressBookName+'</h2>');
         $app.append('<p class="return-listing">Return to address book listing</p>');
         $(".return-listing").on("click", function(){
             
@@ -123,7 +112,7 @@ function displayAddressBook(addressBookId,limit,offset,addressBookName) {
         $("button").css("margin","0.5em");
         $(".btn-next").on("click", function(){
             offset += limit;
-            return displayAddressBook(addressBookId,limit, offset,result.addressBookName);
+            return displayAddressBook(limit,offset,addressBookId,addressBookName);
         });
         if(offset === 0){
                 $(".btn-previous").attr("disabled","disabled");
@@ -134,17 +123,62 @@ function displayAddressBook(addressBookId,limit,offset,addressBookName) {
         }
         $(".btn-previous").on("click", function(){
             offset -= limit;
-            return displayAddressBook(addressBookId,limit, offset,result.addressBookName);
+            return displayAddressBook(limit,offset,addressBookId,addressBookName);
+        });
+        
+        $('li').on('click', function() {
+            displayEntry($(this),addressBookId,addressBookName);
         });
     });
-    
 }
 
-function displayEntry() {
-    
+function displayEntry(entry, addressBookId, addressBookName) {
+    getEntry(entry, addressBookId, addressBookName).then(function(result) {
+        
+        var birthday = new Date(result.birthday);
+        var month = birthday .getMonth()+1;
+            if (month <= 9) {
+                month = '0'+month.toString();
+            }
+        var birthdayFormat = birthday.getFullYear()+'-'+month+'-'+ birthday.getDate();
+        
+        $app.html(''); // Clear the #app div
+        $app.append('<h2>Entry: '+result.firstName+' '+result.lastName+'</h2>');
+        $app.append('<p class="return-listing">Return to address book listing</p>');
+        $(".return-listing").on("click", function(){
+            displayAddressBook(5,0,addressBookId,addressBookName);
+        });
+        $app.append('<ul></ul>');
+        $app.children('ul').append('<li>Name: '+result.firstName+' '+result.lastName+'</li>');
+        $app.children('ul').append('<li>Birthday: '+birthdayFormat+'</li>');
+        
+        for (var i=0; i < result.addresses.length; i++) {
+            $app.append('<h3>Address '+(i+1)+' ('+result.addresses[i].type+')</h3>');
+            $app.append('<ul id=address-'+(i+1)+'></ul>');
+            if (result.addresses[i].line2) {
+                $app.children('#address-'+(i+1)).append('<li>'+result.addresses[i].line1+' '+(result.addresses[i].line2+'</li>'));
+            }
+            else {
+                $app.children('#address-'+(i+1)).append('<li>'+result.addresses[i].line1+'</li>');
+            }
+            if (result.addresses[i].state) {
+                $app.children('#address-'+(i+1)).append('<li>'+result.addresses[i].city+', '+result.addresses[i].state+', '+result.addresses[i].country+'</li>');
+            }
+            else {
+                $app.children('#address-'+(i+1)).append('<li>'+result.addresses[i].city+', '+result.addresses[i].country+'</li>');
+            }
+            $app.children('#address-'+(i+1)).append('<li>'+result.addresses[i].zip+'</li>');
+        }
+        for (var i=0; i < result.phones.length; i++) {
+            $app.append('<h3>Phone '+(i+1)+' ('+result.phones[i].type+')</h3>');
+            $app.append('<ul id=phone-'+(i+1)+'><li>'+result.phones[i].phoneNumber+'</li></ul>');
+        }
+        for (var i=0; i < result.emails.length; i++) {
+            $app.append('<h3>Email '+(i+1)+' ('+result.emails[i].type+')</h3>');
+            $app.append('<ul id=phone-'+(i+1)+'><li>'+result.emails[i].email+'</li></ul>');
+        }
+    });
 }
 // End functions that display views
 
-
-// Start the app by displaying all the addressbooks
 displayAddressBooksList(5, 0);
