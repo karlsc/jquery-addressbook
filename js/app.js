@@ -47,7 +47,9 @@ function displayAddressBooksList(limit, offset) {
     getAddressBooks(limit, offset).then(
         function(result) {
             $app.html(''); // Clear the #app div
+            
             $app.append('<h2>Address Books List</h2>');
+            
             $app.append('<ul>');
             
             result.addressBooks.forEach(function(ab) {
@@ -59,8 +61,12 @@ function displayAddressBooksList(limit, offset) {
                 var addressBookName = $(this).text();
                 displayAddressBook(addressBookId,5,0,addressBookName);
             });
-            $app.append("<button class='btn-previous'><</button>");
-            $app.append("<button class='btn-next'>></button>");
+            $app.append(
+                $("<div class='text-center'/>").append(
+                    $("<button class='btn-previous'><</button>")).append(
+                        $("<button class='btn-next'>></button>")
+                )
+                    );
             
             
             

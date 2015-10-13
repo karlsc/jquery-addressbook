@@ -35,34 +35,89 @@
 @import   "foundation/components/type";
 // @import   "foundation/components/offcanvas";
 // @import   "foundation/components/visibility";
-.div {
-   
-}
+
+
 
 body{
     
-    background-color:#63DDAD;
-    padding-left:50%;
-    
-    
-    ul {
-        list-style:none;
-        background-color:#E3D081;
-        border-radius:1em;
-        padding:1em;
-        cursor:pointer;
-        li {
-            
+    background-color:#2196F3;
+
+        h1 {
+            color:#FFF;
+            font-weight:"bold";
+            font-size:5em;
+            text-align:center;
         }
-    }
+}        
+
+h2 {
+color:#BBDEFB;
+font-weight:normal;
+font-family:Raleway;
+margin-top:2em;
+text-align:center;
+
+}
+        
+
+        
+    
+ul {
+list-style:none;
+background-color:#E3F2FD;
+border-radius:0.3em;
+cursor:pointer;
+font-family:Raleway;
+margin:auto;
+text-align:center;
+max-width:200px;
+
 }
 
-h1 {
-    color:#54494B;
-    font-family:"Futura";
-    font-weight:"bold";
+li {
+    color:(0,0,0,0,87);
 }
 
 button {
-    border-radius:10px;
+    padding:20px;
+    display:inline-block;
+    background-color:#FFEB3B;
+    color:#0D47A1;
+    border-radius:0.3em;
+
+    
 }
+
+.return-listing {
+   background-color::#FFEB3B;
+   color:#0D47A1;
+   padding-left:0.3em;
+   cursor:pointer;
+
+}
+
+.list-title {
+    border:1px solid black;
+}
+
+
+
+   
+.btn-previous {
+    position:relative;
+}
+    
+        
+.btn-next {
+    position:relative;
+
+}        
+            
+
+
+
+
+
+
+    
+
