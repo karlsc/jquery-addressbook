@@ -128,17 +128,23 @@ button {
             }
         }    
     }
-    
-   
 }
+
+.main-table tr {
+    margin-left:10em;
+}
+
+
+
+
 
 .address-table, .phone-table, .email-table {
     padding: 0.5em;
-    vertical-align:top;
+    
     
     ul {
         margin:0.5em;
-        color:tomato;
+        vertical-align:top;
     }
 }
 
