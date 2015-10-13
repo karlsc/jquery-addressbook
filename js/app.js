@@ -152,11 +152,9 @@ function displayEntry(entry, addressBookId, addressBookName) {
         });
         
         $app.append('<table class="main-table"/>');
-        $('.main-table').append('<tr><th>First name</th><td>'+result.firstName+'</td></tr>');
-        $('.main-table').append('<tr><th>Last name</th><td>'+result.lastName+'</td></tr>');
-        $('.main-table').append('<tr><th>Full name</th><td>'+result.lastName+', '+result.firstName+'</td></tr>');
-        $('.main-table').append('<tr><th>Birthday</th><td>'+birthdayFormat+'</td></tr>');
-        $('.main-table').append('<tr><th>Address</th><td class="address-table"></td></tr>');
+        $('.main-table').append('<tr><th>Name:</th><td>'+result.lastName+', '+result.firstName+'</td></tr>');
+        $('.main-table').append('<tr><th>Birthday:</th><td>'+birthdayFormat+'</td></tr>');
+        $('.main-table').append('<tr><th>Address(es):</th><td class="address-table"></td></tr>');
         for (var i = 0; i < result.addresses.length ; i++) {
             var $ul1 = $('<ul class="vcard"/>');
             $ul1.append('<li>'+result.addresses[i].type+':</li>');
@@ -169,14 +167,14 @@ function displayEntry(entry, addressBookId, addressBookName) {
             $ul1.append('<li>'+result.addresses[i].zip+'</li>');
             $('.address-table').append($ul1);
         }
-        $('.main-table').append('<tr><th>Phone</th><td class="phone-table"></td></tr>');
+        $('.main-table').append('<tr><th>Phone(s):</th><td class="phone-table"></td></tr>');
         for (var i=0; i < result.phones.length; i++) {
             var $ul2 = $('<ul class="vcard"/>');
             $ul2.append('<li>'+result.phones[i].type+':</li>');
             $ul2.append('<li>'+result.phones[i].phoneNumber+'</li>');
             $('.phone-table').append($ul2);
         }
-        $('.main-table').append('<tr><th>Email</th><td class="email-table"></td></tr>');
+        $('.main-table').append('<tr><th>Email(s):</th><td class="email-table"></td></tr>');
         for (var i=0; i < result.emails.length; i++) {
             var $ul3 = $('<ul class="vcard"/>');
             $ul3.append('<li>'+result.emails[i].type+':</li>');
