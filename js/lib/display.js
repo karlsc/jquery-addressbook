@@ -1,5 +1,6 @@
 var dataFunctions = require('./data');
 var $app = $('#app');
+var _ = require('underscore');
 
 function displayAddressBooksList(limit, offset) {
     dataFunctions.getAddressBooks(limit, offset).then(
@@ -95,45 +96,20 @@ function displayEntry(entry, addressBookId, addressBookName) {
                 if (month <= 9) {
                     month = '0'+month.toString();
                 }
-            var birthdayFormat = birthday.getFullYear()+'-'+month+'-'+ birthday.getDate();
+            var birthdayFormat = birthday.getFullYear()+' / '+month+' / '+ birthday.getDate();
         }
         
-        $app.html(''); // Clear the #app div
+        $app.html('');
         $app.append('<h2>'+result.firstName+' '+result.lastName+'</h2>');
         $app.append('<p class="return-listing"><<< Return to address book listing</p>');
         $(".return-listing").on("click", function(){
             displayAddressBook(5,0,addressBookId,addressBookName);
         });
         
-        $app.append('<table class="main-table"/>');
-        $('.main-table').append('<tr><th>Birthday:</th><td><ul class="vcard"><li>'+birthdayFormat+'</li></ul></td></tr>');
-        $('.main-table').append('<tr><th>Address(es):</th><td class="address-table"></td></tr>');
-        for (var i = 0; i < result.addresses.length ; i++) {
-            var $ul1 = $('<ul class="vcard"/>');
-            $ul1.append('<li>'+result.addresses[i].type+':</li>');
-            $ul1.append('<li>'+result.addresses[i].line1+'</li>');
-            if (result.addresses[i].line2) {
-                $ul1.append('<li>'+result.addresses[i].line2+'</li>');
-            }
-            $ul1.append('<li>'+result.addresses[i].city+', '+result.addresses[i].state+'</li>');
-            $ul1.append('<li>'+result.addresses[i].country+'</li>');
-            $ul1.append('<li>'+result.addresses[i].zip+'</li>');
-            $('.address-table').append($ul1);
-        }
-        $('.main-table').append('<tr><th>Phone(s):</th><td class="phone-table"></td></tr>');
-        for (var i=0; i < result.phones.length; i++) {
-            var $ul2 = $('<ul class="vcard"/>');
-            $ul2.append('<li>'+result.phones[i].type+':</li>');
-            $ul2.append('<li>'+result.phones[i].phoneNumber+'</li>');
-            $('.phone-table').append($ul2);
-        }
-        $('.main-table').append('<tr><th>Email(s):</th><td class="email-table"></td></tr>');
-        for (var i=0; i < result.emails.length; i++) {
-            var $ul3 = $('<ul class="vcard"/>');
-            $ul3.append('<li>'+result.emails[i].type+':</li>');
-            $ul3.append('<li>'+result.emails[i].email+'</li>');
-            $('.email-table').append($ul3);
-        }
+        var entryTemplateText = require('raw!./templates/entry-template.ejs');
+        var entryTemplate = _.template( entryTemplateText );
+        var output = entryTemplate({entry: result, birthday: birthdayFormat});
+        $app.append(output);
     });
 }
 

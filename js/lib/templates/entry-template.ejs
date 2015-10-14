@@ -1,0 +1,49 @@
+<table class="main-table">
+    <tr>
+        <th>Birthday:</th>
+        <td>
+            <ul class="vcard">
+                <li><%=birthday%></li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th>Address(es):</th>
+        <td>
+            <% for (var i = 0; i < entry.addresses.length ; i++) { %>
+                <ul class="vcard">
+                    <li><%=(entry.addresses[i].type).charAt(0).toUpperCase()+(entry.addresses[i].type).slice(1)%>:</li>
+                    <li><%=entry.addresses[i].line1%></li>
+                    <% if (entry.addresses[i].line2) { %>
+                        <li><%=entry.addresses[i].line2%></li>
+                    <% } %>
+                    <li><%=entry.addresses[i].city%>, <%=entry.addresses[i].state%></li>
+                    <li><%=entry.addresses[i].country%></li>
+                    <li><%=entry.addresses[i].zip%></li>
+                </ul>
+            <% } %>
+        </td>
+    </tr>
+    <tr>
+        <th>Phone(s):</th>
+        <td>
+            <% for (var i = 0; i < entry.phones.length ; i++) { %>
+                <ul class="vcard">
+                    <li><%=(entry.phones[i].type).charAt(0).toUpperCase()+(entry.phones[i].type).slice(1)%>:</li>
+                    <li><%=entry.phones[i].phoneNumber%></li>
+                </ul>
+            <% } %>
+        </td>
+    </tr>
+    <tr>
+        <th>Email(s):</th>
+        <td>
+            <% for (var i = 0; i < entry.emails.length; i++) { %>
+                <ul class="vcard">
+                    <li><%=(entry.emails[i].type).charAt(0).toUpperCase()+(entry.emails[i].type).slice(1)%>:</li>
+                    <li><%=entry.emails[i].email%></li>
+                </ul>
+            <% } %>
+        </td>
+    </tr>
+</table>
