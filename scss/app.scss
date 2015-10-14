@@ -38,6 +38,7 @@
 html, body {
     height:auto;
 }
+
 body {
     background-color: #2196F3;
     h1 {
@@ -80,13 +81,12 @@ body {
         margin:auto;
         th {
             vertical-align: top;
-            padding: 0.5em 0.5em 0 0;
+            padding: 0.5em 0.25em 0 0;
             text-align: right;
         }
         ul {
             vertical-align: top;
             font-size:0.9em;
-            text-align: center;
             width:12em;
         }
     }
@@ -139,6 +139,7 @@ body {
                 display:inline-block;
                 height:100%;
                 font-size:1em;
+                width:14em;
             }
         }
     }
