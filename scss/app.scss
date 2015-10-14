@@ -46,10 +46,11 @@ body {
 
 h2 {
     color: #BBDEFB;
-    font-weight: normal;
-    font-family: Raleway;
+    font-weight:normal;
+    font-family: Raleway, sans-serif;
     margin-top: 2em;
     text-align: center;
+      
 }
 
 ul {
@@ -57,10 +58,14 @@ ul {
     background-color: #E3F2FD;
     border-radius: 0.3em;
     cursor: pointer;
-    font-family: Raleway;
+    font-family: Raleway, sans-serif;
     margin: auto;
+    margin-top:1em;
+    margin-bottom:1em;
+    padding:0.5em;
     text-align: center;
-    max-width: 200px;
+    max-width: 325px;
+    
 }
 
 li {
@@ -80,6 +85,8 @@ button {
     color: #0D47A1;
     padding-left: 0.3em;
     cursor: pointer;
+    padding-left:1em;
+    
 }
 
 .list-title {
@@ -116,8 +123,3 @@ button {
 
 
 
-// padding main display 
-
-// paddin left a return
-
-// main display bigger
