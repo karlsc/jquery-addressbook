@@ -43,7 +43,6 @@ body {
     h1 {
         color: #FFF;
         font-weight: "bold";
-        font-size: 4.5em;
         text-align: center;
     }
     h2 {
@@ -74,25 +73,73 @@ body {
     .return-listing {
         background-color:#FFEB3B;
         color: #0D47A1;
-        padding-left: 0.3em;
         cursor: pointer;
         padding-left:1em;
     }
-    .list-title {
-        border: 1px solid black;
-    }
     .main-table {
+        margin:auto;
         th {
             vertical-align: top;
-            padding: 0.3em 1em 0 1em;
+            padding: 0.5em 0.5em 0 0;
             text-align: right;
         }
         ul {
             vertical-align: top;
             font-size:0.9em;
-            margin-right:0.5em;
-            padding:auto;
             text-align: center;
+            width:12em;
+        }
+    }
+}
+
+@media only screen { 
+    body {
+        h1 {
+            font-size:2.5em;
+        }
+        h2 {
+            font-size:1.5em;
+        }
+        .main-table {
+            ul {
+                display:block;
+                height:auto;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 40.063em) { 
+    body {
+        h1 {
+            font-size:3.5em;
+        }
+        h2 {
+            font-size:2em;
+        }
+        .main-table {
+            ul {
+                display:inline-block;
+                height:100%;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 64.063em) { 
+    body {
+        h1 {
+            font-size:4.5em;
+        }
+        h2 {
+            font-size:2.5em;
+        }
+        .main-table {
+            ul {
+                display:inline-block;
+                height:100%;
+                font-size:1em;
+            }
         }
     }
 }

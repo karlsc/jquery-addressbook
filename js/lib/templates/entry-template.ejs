@@ -2,7 +2,7 @@
     <tr>
         <th>Birthday:</th>
         <td>
-            <ul class="vcard">
+            <ul>
                 <li><%=birthday%></li>
             </ul>
         </td>
@@ -11,7 +11,7 @@
         <th>Address(es):</th>
         <td>
             <% for (var i = 0; i < entry.addresses.length ; i++) { %>
-                <ul class="vcard">
+                <ul>
                     <li><%=(entry.addresses[i].type).charAt(0).toUpperCase()+(entry.addresses[i].type).slice(1)%>:</li>
                     <li><%=entry.addresses[i].line1%></li>
                     <% if (entry.addresses[i].line2) { %>
@@ -28,7 +28,7 @@
         <th>Phone(s):</th>
         <td>
             <% for (var i = 0; i < entry.phones.length ; i++) { %>
-                <ul class="vcard">
+                <ul>
                     <li><%=(entry.phones[i].type).charAt(0).toUpperCase()+(entry.phones[i].type).slice(1)%>:</li>
                     <li><%=entry.phones[i].phoneNumber%></li>
                 </ul>
@@ -39,7 +39,7 @@
         <th>Email(s):</th>
         <td>
             <% for (var i = 0; i < entry.emails.length; i++) { %>
-                <ul class="vcard">
+                <ul>
                     <li><%=(entry.emails[i].type).charAt(0).toUpperCase()+(entry.emails[i].type).slice(1)%>:</li>
                     <li><%=entry.emails[i].email%></li>
                 </ul>
