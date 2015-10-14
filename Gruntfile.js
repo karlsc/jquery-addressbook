@@ -16,6 +16,16 @@ module.exports = function(grunt) {
         }
       }
     },
+    
+    webpack: {
+      build: {
+        entry: './js/app.js',
+        output: {
+          path: "./js/",
+          filename: "app-bundle.js",
+        },
+      }
+    },
 
     watch: {
       grunt: {
@@ -28,13 +38,19 @@ module.exports = function(grunt) {
       sass: {
         files: 'scss/**/*.scss',
         tasks: ['sass']
+      },
+      
+      webpack: {
+        files: ['js/**/*.js', '!js/app-bundle.js'],
+        tasks: ['webpack']
       }
     }
   });
 
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-webpack');
 
-  grunt.registerTask('build', ['sass']);
+  grunt.registerTask('build', ['sass', 'webpack']);
   grunt.registerTask('default', ['build','watch']);
 }
