@@ -34,91 +34,63 @@
 @import "foundation/components/type";
 // @import   "foundation/components/offcanvas";
 // @import   "foundation/components/visibility";
+
 body {
     background-color: #2196F3;
     h1 {
         color: #FFF;
         font-weight: "bold";
-        font-size: 5em;
+        font-size: 4.5em;
         text-align: center;
     }
-}
-
-h2 {
-    color: #BBDEFB;
-    font-weight:normal;
-    font-family: Raleway, sans-serif;
-    margin-top: 2em;
-    text-align: center;
-      
-}
-
-ul {
-    list-style: none;
-    background-color: #E3F2FD;
-    border-radius: 0.3em;
-    cursor: pointer;
-    font-family: Raleway, sans-serif;
-    margin: auto;
-    margin-top:1em;
-    margin-bottom:1em;
-    padding:0.5em;
-    text-align: center;
-    max-width: 325px;
-    
-}
-
-li {
-    color: (0, 0, 0, 0, 87);
-}
-
-button {
-    padding: 20px;
-    display: inline-block;
-    background-color: #FFEB3B;
-    color: #0D47A1;
-    border-radius: 0.3em;
-}
-
-.return-listing {
-    background-color:#FFEB3B;
-    color: #0D47A1;
-    padding-left: 0.3em;
-    cursor: pointer;
-    padding-left:1em;
-}
-
-.list-title {
-    border: 1px solid black;
-}
-
-.btn-previous {
-    position: relative;
-}
-
-.btn-next {
-    position: relative;
-}
-
-.main-table {
-    th {
-        vertical-align: top;
-        padding: 0.5em;
-        text-align: right;
-        td {
-            padding: 0.5em;
-            vertical-align: top;
-        }
+    h2 {
+        color: #BBDEFB;
+        font-weight:normal;
+        font-family: Raleway, sans-serif;
+        text-align: center;
     }
     ul {
-        margin: 0.5em;
-        vertical-align: top;
+        list-style: none;
+        background-color: #E3F2FD;
+        border-radius: 0.3em;
+        cursor: pointer;
+        font-family: Raleway, sans-serif;
+        margin: 0.5em auto 0.5em auto;
+        padding:0.5em;
+        text-align: center;
+        max-width: 325px;
+    }
+    button {
+        padding: 20px;
+        display: inline-block;
+        background-color: #FFEB3B;
+        color: #0D47A1;
+        border-radius: 0.3em;
+        position: relative;
+    }
+    .return-listing {
+        background-color:#FFEB3B;
+        color: #0D47A1;
+        padding-left: 0.3em;
+        cursor: pointer;
+        padding-left:1em;
+    }
+    .list-title {
+        border: 1px solid black;
+    }
+    .main-table {
+        th {
+            vertical-align: top;
+            padding: 0.3em 1em 0 1em;
+            text-align: right;
+        }
+        ul {
+            vertical-align: top;
+            font-size:0.9em;
+            height:100%;
+            margin-right:0.5em;
+            padding-bottom:0em;
+            text-align: center;
+        }
     }
 }
-
-.main-table tr {
-    margin-left: 10em;
-}
-
-
-
