@@ -35,6 +35,9 @@
 // @import   "foundation/components/offcanvas";
 // @import   "foundation/components/visibility";
 
+html, body {
+    height:auto;
+}
 body {
     background-color: #2196F3;
     h1 {
