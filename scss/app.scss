@@ -63,6 +63,12 @@ body {
         text-align: center;
         max-width: 325px;
     }
+    a {
+        color:#0D47A1;
+        &:hover {
+            opacity:0.5;
+        }
+    }
     button {
         padding: 20px;
         display: inline-block;
@@ -70,12 +76,7 @@ body {
         color: #0D47A1;
         border-radius: 0.3em;
         position: relative;
-    }
-    .return-listing {
-        background-color:#FFEB3B;
-        color: #0D47A1;
-        cursor: pointer;
-        padding-left:1em;
+        margin:0.5em;
     }
     .main-table {
         margin:auto;
