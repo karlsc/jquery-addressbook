@@ -110,15 +110,42 @@
 	    dataFunctions.getEntry(id).then(function(result) {
 	        var entryTemplateText = __webpack_require__(4);
 	        var entryTemplate = _.template( entryTemplateText );
-	        if(result.birthday !== undefined) {
-	            var birthday = new Date(result.birthday);
-	            var month = birthday .getMonth()+1;
-	            if (month <= 9) { month = '0'+month.toString(); }
-	            var birthdayFormat = birthday.getFullYear()+' / '+month+' / '+ birthday.getDate();
-	        }
+	        var birthdayFormat = result.birthday.substring(0, 10);
 	        var output = entryTemplate({entry: result, birthday: birthdayFormat});
 	        
 	        $app.html('').append(output);
+	        
+	        $("ul").on("click","li", function(){
+	            var value = $(this).text();
+	            var field = $(this).data('field');
+	            console.log(value);
+	            
+	            $(this).replaceWith("<input class='edit-input' type='text' value='"+value+"'>");
+	            
+	            $('.edit-input').on('keypress', function(e) {
+	                var keyCode = e.keyCode;
+	                if (keyCode === 13) {
+	                    var save = {};
+	                    save[field] = $(this).val();
+	                    $.ajax({
+	                        method: 'PUT',
+	                        url: 'https://loopback-rest-api-demo-ziad-saab.c9.io/api/Entries/' + id,
+	                        data: save
+	                    });
+	                    $(this).replaceWith("<li data-field='"+field+"'>"+save[field]+"</li>");
+	                    
+	                    // Nouvelle adresse
+	                    // $.ajax({
+	                    //     method: 'POST',
+	                    //     url: 'https://loopback-rest-api-demo-ziad-saab.c9.io/api/Entry/' + id + '/addresses',
+	                    //     data: {
+	                    //         line1: 'xxx 1st street',
+	                    //         zip: '12345'
+	                    //     }
+	                    // })
+	                }
+	            });
+	        });
 	    });
 	}
 
@@ -1725,7 +1752,7 @@
 /* 4 */
 /***/ function(module, exports) {
 
-	module.exports = "<h2><%=(entry.firstName).charAt(0).toUpperCase()+(entry.firstName).slice(1)%> <%=(entry.lastName).charAt(0).toUpperCase()+(entry.lastName).slice(1)%></h2>\n<table class=\"main-table\">\n    <tr>\n        <th>Birthday:</th>\n        <td>\n            <ul>\n                <li><%=birthday%></li>\n            </ul>\n        </td>\n    </tr>\n    <tr>\n        <th>Address(es):</th>\n        <td>\n            <% for (var i = 0; i < entry.addresses.length ; i++) { %>\n                <ul>\n                    <li><%=(entry.addresses[i].type).charAt(0).toUpperCase()+(entry.addresses[i].type).slice(1)%>:</li>\n                    <li><%=entry.addresses[i].line1%></li>\n                    <% if (entry.addresses[i].line2) { %>\n                        <li><%=entry.addresses[i].line2%></li>\n                    <% } %>\n                    <li><%=entry.addresses[i].city%>, <%=entry.addresses[i].state%></li>\n                    <li><%=entry.addresses[i].country%></li>\n                    <li><%=entry.addresses[i].zip%></li>\n                </ul>\n            <% } %>\n        </td>\n    </tr>\n    <tr>\n        <th>Phone(s):</th>\n        <td>\n            <% for (var i = 0; i < entry.phones.length ; i++) { %>\n                <ul>\n                    <li><%=(entry.phones[i].type).charAt(0).toUpperCase()+(entry.phones[i].type).slice(1)%>:</li>\n                    <li><%=entry.phones[i].phoneNumber%></li>\n                </ul>\n            <% } %>\n        </td>\n    </tr>\n    <tr>\n        <th>Email(s):</th>\n        <td>\n            <% for (var i = 0; i < entry.emails.length; i++) { %>\n                <ul>\n                    <li><%=(entry.emails[i].type).charAt(0).toUpperCase()+(entry.emails[i].type).slice(1)%>:</li>\n                    <li><%=entry.emails[i].email%></li>\n                </ul>\n            <% } %>\n        </td>\n    </tr>\n</table>"
+	module.exports = "<h2><%=(entry.firstName).charAt(0).toUpperCase()+(entry.firstName).slice(1)%> <%=(entry.lastName).charAt(0).toUpperCase()+(entry.lastName).slice(1)%></h2>\n<table class=\"main-table\">\n    <tr>\n        <th>First Name:</th>\n        <td>\n            <ul>\n                <li data-field='firstName'><%=(entry.firstName).charAt(0).toUpperCase()+(entry.firstName).slice(1)%></li>\n            </ul>\n        </td>\n    </tr>\n    <tr>\n        <th>Last Name:</th>\n        <td>\n            <ul>\n                <li data-field='lastName'><%=(entry.lastName).charAt(0).toUpperCase()+(entry.lastName).slice(1)%></li>\n            </ul>\n        </td>\n    </tr>\n    <tr>\n        <th>Birthday:</th>\n        <td>\n            <ul>\n                <li data-field='birthday'><%=birthday%></li>\n            </ul>\n        </td>\n    </tr>\n    <tr>\n        <th>Address(es):</th>\n        <td>\n            <% for (var i = 0; i < entry.addresses.length ; i++) { %>\n                <ul>\n                    <li data-field='type'><%=(entry.addresses[i].type).charAt(0).toUpperCase()+(entry.addresses[i].type).slice(1)%></li>\n                    <li data-field='line1'><%=entry.addresses[i].line1%></li>\n                    <% if (entry.addresses[i].line2) { %>\n                        <li data-field='line2'><%=entry.addresses[i].line2%></li>\n                    <% } %>\n                    <li data-field='city'><%=entry.addresses[i].city%></li>\n                    <li data-field='state'></li><%=entry.addresses[i].state%></li>\n                    <li data-field='country'><%=entry.addresses[i].country%></li>\n                    <li data-field='zi'><%=entry.addresses[i].zip%></li>\n                </ul>\n            <% } %>\n        </td>\n    </tr>\n    <tr>\n        <th>Phone(s):</th>\n        <td>\n            <% for (var i = 0; i < entry.phones.length ; i++) { %>\n                <ul>\n                    <li data-field='type'><%=(entry.phones[i].type).charAt(0).toUpperCase()+(entry.phones[i].type).slice(1)%></li>\n                    <li data-field='phoneNumber'><%=entry.phones[i].phoneNumber%></li>\n                </ul>\n            <% } %>\n        </td>\n    </tr>\n    <tr>\n        <th>Email(s):</th>\n        <td>\n            <% for (var i = 0; i < entry.emails.length; i++) { %>\n                <ul>\n                    <li data-field='type'><%=(entry.emails[i].type).charAt(0).toUpperCase()+(entry.emails[i].type).slice(1)%></li>\n                    <li data-field='email'><%=entry.emails[i].email%></li>\n                </ul>\n            <% } %>\n        </td>\n    </tr>\n</table>"
 
 /***/ },
 /* 5 */

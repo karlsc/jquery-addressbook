@@ -39,15 +39,42 @@ function displayEntry(id) {
     dataFunctions.getEntry(id).then(function(result) {
         var entryTemplateText = require('raw!./templates/entry-template.ejs');
         var entryTemplate = _.template( entryTemplateText );
-        if(result.birthday !== undefined) {
-            var birthday = new Date(result.birthday);
-            var month = birthday .getMonth()+1;
-            if (month <= 9) { month = '0'+month.toString(); }
-            var birthdayFormat = birthday.getFullYear()+' / '+month+' / '+ birthday.getDate();
-        }
+        var birthdayFormat = result.birthday.substring(0, 10);
         var output = entryTemplate({entry: result, birthday: birthdayFormat});
         
         $app.html('').append(output);
+        
+        $("ul").on("click","li", function(){
+            var value = $(this).text();
+            var field = $(this).data('field');
+            console.log(value);
+            
+            $(this).replaceWith("<input class='edit-input' type='text' value='"+value+"'>");
+            
+            $('.edit-input').on('keypress', function(e) {
+                var keyCode = e.keyCode;
+                if (keyCode === 13) {
+                    var save = {};
+                    save[field] = $(this).val();
+                    $.ajax({
+                        method: 'PUT',
+                        url: 'https://loopback-rest-api-demo-ziad-saab.c9.io/api/Entries/' + id,
+                        data: save
+                    });
+                    $(this).replaceWith("<li data-field='"+field+"'>"+save[field]+"</li>");
+                    
+                    // Nouvelle adresse
+                    // $.ajax({
+                    //     method: 'POST',
+                    //     url: 'https://loopback-rest-api-demo-ziad-saab.c9.io/api/Entry/' + id + '/addresses',
+                    //     data: {
+                    //         line1: 'xxx 1st street',
+                    //         zip: '12345'
+                    //     }
+                    // })
+                }
+            });
+        });
     });
 }
 
