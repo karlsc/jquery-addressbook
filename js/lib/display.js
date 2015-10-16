@@ -24,23 +24,20 @@ function displayAddressBooksList(page) {
                 $(".add-ab").text("-");
             } else { $(".new-ab").remove(); $(".add-ab").text("+"); }
             
-            $('.input-ab').on('keypress', function(e) {
-                var keyCode = e.keyCode;
-                if (keyCode === 13) {
-                    var newAB = $(this).val();
-                    var newABCap = (newAB).charAt(0).toUpperCase()+(newAB).slice(1);
-                    if(!newAB || newAB.length < 1 || newAB === "" || newAB === undefined) {
-                        alert("Please enter a valid address book name.");
-                    }
-                    else {
-                        $.ajax({ method: 'POST', url: "https://loopback-rest-api-demo-ziad-saab.c9.io/api/AddressBooks", data: {name: newABCap} });
+            $('.btn-add-entry').on('click', function() {
+                if (!$(".input-ab").val() || $(".input-ab").val().length < 1) {
+                    alert("Please enter a valid address book name.");
+                }
+                else {
+                    var ab = $(".input-ab").val();
+                    var abName = (ab).charAt(0).toUpperCase()+(ab).slice(1);
+
+                    $.ajax({ method: 'POST', url: "https://loopback-rest-api-demo-ziad-saab.c9.io/api/AddressBooks", data: {name: abName} });
                         
-                        $.getJSON("https://loopback-rest-api-demo-ziad-saab.c9.io/api/AddressBooks",function(result){
-                            var newABId = result[result.length-1].id;
-                            window.location.href = "https://jquery-addressbook-karlysun.c9.io/#addressbooks/"+newABId;
-                        });
-                        
-                    }
+                    $.getJSON("https://loopback-rest-api-demo-ziad-saab.c9.io/api/AddressBooks",function(result){
+                        var newABId = result[result.length-1].id;
+                        window.location.href = "https://jquery-addressbook-karlysun.c9.io/#addressbooks/"+newABId;
+                    });
                 }
             });
         });
