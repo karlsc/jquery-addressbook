@@ -35,11 +35,12 @@
                         <li data-field='line2' data-id='<%=i%>'><%=entry.addresses[i].line2%></li>
                     <% } %>
                     <li data-field='city' data-id='<%=i%>'><%=entry.addresses[i].city%></li>
-                    <li data-field='state' data-id='<%=i%>'></li><%=entry.addresses[i].state%></li>
+                    <li data-field='state' data-id='<%=i%>'><%=entry.addresses[i].state%></li>
                     <li data-field='country' data-id='<%=i%>'><%=entry.addresses[i].country%></li>
                     <li data-field='zip' data-id='<%=i%>'><%=entry.addresses[i].zip%></li>
                 </ul>
             <% } %>
+            <button class='btn-add-addresses'>Add</button>
         </td>
     </tr>
     <tr>
@@ -51,6 +52,7 @@
                     <li data-field='phoneNumber' data-id='<%=i%>'><%=entry.phones[i].phoneNumber%></li>
                 </ul>
             <% } %>
+            <button class='btn-add-phones'>Add</button>
         </td>
     </tr>
     <tr>
@@ -62,6 +64,7 @@
                     <li data-field='email' data-id='<%=i%>'><%=entry.emails[i].email%></li>
                 </ul>
             <% } %>
+            <button class='btn-add-emails'>Add</button>
         </td>
     </tr>
 </table>

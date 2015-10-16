@@ -9,7 +9,7 @@
 // @import   "foundation/components/dropdown";
 // @import   "foundation/components/dropdown-buttons";
 // @import   "foundation/components/flex-video";
-// @import   "foundation/components/forms";
+@import   "foundation/components/forms";
 @import "foundation/components/grid";
 // @import   "foundation/components/inline-lists";
 // @import   "foundation/components/joyride";
@@ -78,6 +78,38 @@ body {
         position: relative;
         margin:0.5em;
     }
+    .input-ab {
+        width:275px;
+    }
+    .input-fn, .input-ln, .input-bd, .input-ab {
+        text-align:center;
+        font-style:italic;
+        color:#0D47A1;
+        height: 2em;
+        display:inline;
+        margin:0 0.5em 0 0;
+    }
+    .edit-input {
+        width: auto;
+        margin: 0 0.5em 0 0;
+        display: inline;
+        vertical-align: middle;
+        height: 2em;
+        text-align:center;
+    }
+    .btn-add-addresses, .btn-add-phones, .btn-add-emails {
+        margin:auto 0 auto 0;
+        vertical-align:top;
+    }
+    .btn-add-addresses, .btn-add-phones, .btn-add-emails, .btn-add-entry {
+        font-size:1em;
+        height:1.8em;
+        width:2.5em;
+        padding:0;
+    }
+    .btn-add-entry {
+        margin:0;
+    }
     .main-table {
         margin:auto;
         li {
@@ -110,6 +142,16 @@ body {
         h2 {
             font-size:1.5em;
         }
+        .input-fn, .input-ln {
+            width:91.5px;
+        }
+        .input-bd {
+            width:78px;
+        }
+        .btn-add-addresses, .btn-add-phones, .btn-add-emails {
+            width:100%;
+            margin-bottom:0.25em;
+        }
         .main-table {
             ul {
                 display:block;
@@ -127,6 +169,10 @@ body {
         }
         h2 {
             font-size:2em;
+        }
+        .btn-add-addresses, .btn-add-phones, .btn-add-emails {
+            width:2.5em;
+            margin-bottom:0;
         }
         .main-table {
             td {
