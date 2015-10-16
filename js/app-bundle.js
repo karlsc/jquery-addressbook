@@ -81,12 +81,34 @@
 	        $app.html('').append('<h2>Address Books List</h2>').append("<ul>");
 	        $app.append( $("<div class='text-center'/>").append( 
 	            $("<a class='link-prev' href='/#addressbooks/page"+(Number(page)-1)+"'><button class='btn-previous'>&lt;</button></a>")).append( 
+	            $("<button class='add-ab'>+</button>")).append(
 	            $("<a class='link-next' href='/#addressbooks/page"+(Number(page)+1)+"'><button class='btn-next'>&gt;</button></a>")));
 	        
 	        result.addressBooks.forEach(function(ab) { $app.find("ul").append('<li data-id="'+ab.id+'"><a href="/#addressbooks/'+ab.id+'">'+(ab.name).charAt(0).toUpperCase()+(ab.name).slice(1)+'</a></li>'); });
 	        
 	        if(offset === 0)    { $(".btn-previous").attr("disabled","disabled"); $(".link-prev").removeAttr("href"); }
 	        if(!result.hasNext) { $(".btn-next"    ).attr("disabled","disabled"); $(".link-next").removeAttr("href"); }
+	        
+	        $(".text-center").on("click",".add-ab", function(){
+	            
+	            $(".link-prev").before("<div class='new-ab'><p>Select a new address book name: </p><input class='input-ab' required/></div>");
+	            $(".add-ab").text("-").on("click", function(){
+	                $(".new-ab").remove();
+	            });
+	            $('.input-ab').on('keypress', function(e) {
+	                var keyCode = e.keyCode;
+	                if (keyCode === 13) {
+	                    
+	                    var newAB = $(this).val();
+	                    if(!newAB) {
+	                        alert("Please enter something.");
+	                    }
+	                    else {
+	                        $.ajax({ method: 'POST', url: "https://loopback-rest-api-demo-ziad-saab.c9.io/api/AddressBooks", data: {name: newAB} });
+	                    }
+	                }
+	            });
+	        });
 	    });
 	}
 
@@ -118,8 +140,8 @@
 	        $("ul").on("click","li", function(){
 	            var value = $(this).text();
 	            var field = $(this).data('field');
-	            console.log(value);
-	            
+	            var loopId = $(this).parent().data('id');
+
 	            $(this).replaceWith("<input class='edit-input' type='text' value='"+value+"'>");
 	            
 	            $('.edit-input').on('keypress', function(e) {
@@ -127,12 +149,18 @@
 	                if (keyCode === 13) {
 	                    var save = {};
 	                    save[field] = $(this).val();
-	                    $.ajax({
-	                        method: 'PUT',
-	                        url: 'https://loopback-rest-api-demo-ziad-saab.c9.io/api/Entries/' + id,
-	                        data: save
-	                    });
+	                    var type = $(this).parent().data('type');
+	                    var url = "https://loopback-rest-api-demo-ziad-saab.c9.io/api/"+type+"/";
+	                    
+	                    switch(type){
+	                        case "Entries": url += id; break;
+	                        case "Addresses": url += result.addresses[loopId].id; break;
+	                        case "Phones": url += result.phones[loopId].id; break;
+	                        case "EmailAddresses": url += result.emails[loopId].id; break;
+	                    }
+	                    $.ajax({ method: 'PUT', url: url, data: save });
 	                    $(this).replaceWith("<li data-field='"+field+"'>"+save[field]+"</li>");
+	                    
 	                    
 	                    // Nouvelle adresse
 	                    // $.ajax({
@@ -1752,7 +1780,7 @@
 /* 4 */
 /***/ function(module, exports) {
 
-	module.exports = "<h2><%=(entry.firstName).charAt(0).toUpperCase()+(entry.firstName).slice(1)%> <%=(entry.lastName).charAt(0).toUpperCase()+(entry.lastName).slice(1)%></h2>\n<table class=\"main-table\">\n    <tr>\n        <th>First Name:</th>\n        <td>\n            <ul>\n                <li data-field='firstName'><%=(entry.firstName).charAt(0).toUpperCase()+(entry.firstName).slice(1)%></li>\n            </ul>\n        </td>\n    </tr>\n    <tr>\n        <th>Last Name:</th>\n        <td>\n            <ul>\n                <li data-field='lastName'><%=(entry.lastName).charAt(0).toUpperCase()+(entry.lastName).slice(1)%></li>\n            </ul>\n        </td>\n    </tr>\n    <tr>\n        <th>Birthday:</th>\n        <td>\n            <ul>\n                <li data-field='birthday'><%=birthday%></li>\n            </ul>\n        </td>\n    </tr>\n    <tr>\n        <th>Address(es):</th>\n        <td>\n            <% for (var i = 0; i < entry.addresses.length ; i++) { %>\n                <ul>\n                    <li data-field='type'><%=(entry.addresses[i].type).charAt(0).toUpperCase()+(entry.addresses[i].type).slice(1)%></li>\n                    <li data-field='line1'><%=entry.addresses[i].line1%></li>\n                    <% if (entry.addresses[i].line2) { %>\n                        <li data-field='line2'><%=entry.addresses[i].line2%></li>\n                    <% } %>\n                    <li data-field='city'><%=entry.addresses[i].city%></li>\n                    <li data-field='state'></li><%=entry.addresses[i].state%></li>\n                    <li data-field='country'><%=entry.addresses[i].country%></li>\n                    <li data-field='zi'><%=entry.addresses[i].zip%></li>\n                </ul>\n            <% } %>\n        </td>\n    </tr>\n    <tr>\n        <th>Phone(s):</th>\n        <td>\n            <% for (var i = 0; i < entry.phones.length ; i++) { %>\n                <ul>\n                    <li data-field='type'><%=(entry.phones[i].type).charAt(0).toUpperCase()+(entry.phones[i].type).slice(1)%></li>\n                    <li data-field='phoneNumber'><%=entry.phones[i].phoneNumber%></li>\n                </ul>\n            <% } %>\n        </td>\n    </tr>\n    <tr>\n        <th>Email(s):</th>\n        <td>\n            <% for (var i = 0; i < entry.emails.length; i++) { %>\n                <ul>\n                    <li data-field='type'><%=(entry.emails[i].type).charAt(0).toUpperCase()+(entry.emails[i].type).slice(1)%></li>\n                    <li data-field='email'><%=entry.emails[i].email%></li>\n                </ul>\n            <% } %>\n        </td>\n    </tr>\n</table>"
+	module.exports = "<h2><%=(entry.firstName).charAt(0).toUpperCase()+(entry.firstName).slice(1)%> <%=(entry.lastName).charAt(0).toUpperCase()+(entry.lastName).slice(1)%></h2>\n<table class=\"main-table\">\n    <tr>\n        <th>First Name:</th>\n        <td>\n            <ul data-type=\"Entries\" data-id='0'>\n                <li data-field='firstName'><%=(entry.firstName).charAt(0).toUpperCase()+(entry.firstName).slice(1)%></li>\n            </ul>\n        </td>\n    </tr>\n    <tr>\n        <th>Last Name:</th>\n        <td>\n            <ul data-type=\"Entries\" data-id='0'>\n                <li data-field='lastName'><%=(entry.lastName).charAt(0).toUpperCase()+(entry.lastName).slice(1)%></li>\n            </ul>\n        </td>\n    </tr>\n    <tr>\n        <th>Birthday:</th>\n        <td>\n            <ul data-type=\"Entries\" data-id='0'>\n                <li data-field='birthday'><%=birthday%></li>\n            </ul>\n        </td>\n    </tr>\n    <tr>\n        <th>Address(es):</th>\n        <td>\n            <% for (var i = 0; i < entry.addresses.length ; i++) { %>\n                <ul data-type=\"Addresses\" data-id='<%=i%>'>\n                    <li data-field='type' data-id='<%=i%>'><%=(entry.addresses[i].type).charAt(0).toUpperCase()+(entry.addresses[i].type).slice(1)%></li>\n                    <li data-field='line1' data-id='<%=i%>'><%=entry.addresses[i].line1%></li>\n                    <% if (entry.addresses[i].line2) { %>\n                        <li data-field='line2' data-id='<%=i%>'><%=entry.addresses[i].line2%></li>\n                    <% } %>\n                    <li data-field='city' data-id='<%=i%>'><%=entry.addresses[i].city%></li>\n                    <li data-field='state' data-id='<%=i%>'></li><%=entry.addresses[i].state%></li>\n                    <li data-field='country' data-id='<%=i%>'><%=entry.addresses[i].country%></li>\n                    <li data-field='zip' data-id='<%=i%>'><%=entry.addresses[i].zip%></li>\n                </ul>\n            <% } %>\n        </td>\n    </tr>\n    <tr>\n        <th>Phone(s):</th>\n        <td>\n            <% for (var i = 0; i < entry.phones.length ; i++) { %>\n                <ul data-type=\"Phones\" data-id='<%=i%>'>\n                    <li data-field='type' data-id='<%=i%>'><%=(entry.phones[i].type).charAt(0).toUpperCase()+(entry.phones[i].type).slice(1)%></li>\n                    <li data-field='phoneNumber' data-id='<%=i%>'><%=entry.phones[i].phoneNumber%></li>\n                </ul>\n            <% } %>\n        </td>\n    </tr>\n    <tr>\n        <th>Email(s):</th>\n        <td>\n            <% for (var i = 0; i < entry.emails.length; i++) { %>\n                <ul data-type=\"EmailAddresses\" data-id='<%=i%>'>\n                    <li data-field='type' data-id='<%=i%>'><%=(entry.emails[i].type).charAt(0).toUpperCase()+(entry.emails[i].type).slice(1)%></li>\n                    <li data-field='email' data-id='<%=i%>'><%=entry.emails[i].email%></li>\n                </ul>\n            <% } %>\n        </td>\n    </tr>\n</table>"
 
 /***/ },
 /* 5 */

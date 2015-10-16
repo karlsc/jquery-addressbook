@@ -3,7 +3,7 @@
     <tr>
         <th>First Name:</th>
         <td>
-            <ul>
+            <ul data-type="Entries" data-id='0'>
                 <li data-field='firstName'><%=(entry.firstName).charAt(0).toUpperCase()+(entry.firstName).slice(1)%></li>
             </ul>
         </td>
@@ -11,7 +11,7 @@
     <tr>
         <th>Last Name:</th>
         <td>
-            <ul>
+            <ul data-type="Entries" data-id='0'>
                 <li data-field='lastName'><%=(entry.lastName).charAt(0).toUpperCase()+(entry.lastName).slice(1)%></li>
             </ul>
         </td>
@@ -19,7 +19,7 @@
     <tr>
         <th>Birthday:</th>
         <td>
-            <ul>
+            <ul data-type="Entries" data-id='0'>
                 <li data-field='birthday'><%=birthday%></li>
             </ul>
         </td>
@@ -28,16 +28,16 @@
         <th>Address(es):</th>
         <td>
             <% for (var i = 0; i < entry.addresses.length ; i++) { %>
-                <ul>
-                    <li data-field='type'><%=(entry.addresses[i].type).charAt(0).toUpperCase()+(entry.addresses[i].type).slice(1)%></li>
-                    <li data-field='line1'><%=entry.addresses[i].line1%></li>
+                <ul data-type="Addresses" data-id='<%=i%>'>
+                    <li data-field='type' data-id='<%=i%>'><%=(entry.addresses[i].type).charAt(0).toUpperCase()+(entry.addresses[i].type).slice(1)%></li>
+                    <li data-field='line1' data-id='<%=i%>'><%=entry.addresses[i].line1%></li>
                     <% if (entry.addresses[i].line2) { %>
-                        <li data-field='line2'><%=entry.addresses[i].line2%></li>
+                        <li data-field='line2' data-id='<%=i%>'><%=entry.addresses[i].line2%></li>
                     <% } %>
-                    <li data-field='city'><%=entry.addresses[i].city%></li>
-                    <li data-field='state'></li><%=entry.addresses[i].state%></li>
-                    <li data-field='country'><%=entry.addresses[i].country%></li>
-                    <li data-field='zi'><%=entry.addresses[i].zip%></li>
+                    <li data-field='city' data-id='<%=i%>'><%=entry.addresses[i].city%></li>
+                    <li data-field='state' data-id='<%=i%>'></li><%=entry.addresses[i].state%></li>
+                    <li data-field='country' data-id='<%=i%>'><%=entry.addresses[i].country%></li>
+                    <li data-field='zip' data-id='<%=i%>'><%=entry.addresses[i].zip%></li>
                 </ul>
             <% } %>
         </td>
@@ -46,9 +46,9 @@
         <th>Phone(s):</th>
         <td>
             <% for (var i = 0; i < entry.phones.length ; i++) { %>
-                <ul>
-                    <li data-field='type'><%=(entry.phones[i].type).charAt(0).toUpperCase()+(entry.phones[i].type).slice(1)%></li>
-                    <li data-field='phoneNumber'><%=entry.phones[i].phoneNumber%></li>
+                <ul data-type="Phones" data-id='<%=i%>'>
+                    <li data-field='type' data-id='<%=i%>'><%=(entry.phones[i].type).charAt(0).toUpperCase()+(entry.phones[i].type).slice(1)%></li>
+                    <li data-field='phoneNumber' data-id='<%=i%>'><%=entry.phones[i].phoneNumber%></li>
                 </ul>
             <% } %>
         </td>
@@ -57,9 +57,9 @@
         <th>Email(s):</th>
         <td>
             <% for (var i = 0; i < entry.emails.length; i++) { %>
-                <ul>
-                    <li data-field='type'><%=(entry.emails[i].type).charAt(0).toUpperCase()+(entry.emails[i].type).slice(1)%></li>
-                    <li data-field='email'><%=entry.emails[i].email%></li>
+                <ul data-type="EmailAddresses" data-id='<%=i%>'>
+                    <li data-field='type' data-id='<%=i%>'><%=(entry.emails[i].type).charAt(0).toUpperCase()+(entry.emails[i].type).slice(1)%></li>
+                    <li data-field='email' data-id='<%=i%>'><%=entry.emails[i].email%></li>
                 </ul>
             <% } %>
         </td>
